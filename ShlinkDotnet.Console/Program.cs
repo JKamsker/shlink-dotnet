@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using RestSharp;
 using RestSharp.Serializers.NewtonsoftJson;
 
+using ShlinkDotnet.Extensions;
 using ShlinkDotnet.Models.Configuration;
 using ShlinkDotnet.Models.Create;
 using ShlinkDotnet.Web;
@@ -25,28 +26,8 @@ var host = Host.CreateDefaultBuilder(args)
             services
                 .AddOptions()
                 .AddHttpClient()
-                .Configure<ShlinkConfig>(hostContext.Configuration.GetSection("shlink"))
-                ;
+                .AddShlink(hostContext.Configuration.GetSection("shlink"));
             
-            services.AddTransient<ShlinkRestClient>(x =>
-            {
-                var config = x.GetRequiredService<IOptions<ShlinkConfig>>().Value;
-                var shlinkClient = x.GetRequiredService<IHttpClientFactory>().CreateClient("shlink");
-                
-                var options = new RestClientOptions(config.BaseUrl)
-                {
-                    MaxTimeout = 1000,
-                };
-                
-                var client = new RestClient(shlinkClient, options)
-                    .UseNewtonsoftJson()
-                    .AddDefaultHeader("X-Api-Key", config.ApiKey)
-                    ;
-
-                return new ShlinkRestClient(client);
-            })
-            .AddTransient<ShlinkApiClient>();
-
         })
         .Build();
 
