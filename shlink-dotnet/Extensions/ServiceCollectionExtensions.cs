@@ -17,6 +17,7 @@ namespace ShlinkDotnet.Extensions
         public static IServiceCollection AddShlink(this IServiceCollection services, IConfigurationSection configuration)
         {
             return services
+                .AddHttpClient()
                 .Configure<ShlinkConfig>(configuration)
                 .AddTransient<ShlinkRestClient>(x =>
                 {

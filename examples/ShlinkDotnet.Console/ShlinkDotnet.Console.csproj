@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\shlink-dotnet\ShlinkDotnet.csproj" />
+    <ProjectReference Include="..\..\shlink-dotnet\ShlinkDotnet.csproj" />
   </ItemGroup>
 	<ItemGroup>
 		<None Update="appsettings.Development.json">
