@@ -33,9 +33,9 @@ jobs:
       run: dotnet build --configuration Release /p:Version=${VERSION} --no-restore
     - 
       name: Pack
-      run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
+      run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output ./out
     - 
       uses: actions/upload-artifact@v3
       with:
         name: nupkg
-        path: ./ShlinkDotnet.${VERSION}.nupkg
+        path: out/
