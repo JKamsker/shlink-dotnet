@@ -14,7 +14,7 @@ jobs:
     steps:
     - 
       name: Set VERSION
-      run: echo "VERSION=v1.0.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+      run: echo "VERSION=1.0.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
     - 
       name: Print Version
       run: echo "VERSION is $VERSION"
