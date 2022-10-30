@@ -12,12 +12,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
+    - 
+      name: Set VERSION
+      run: echo "VERSION=v1.0.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+    - 
+      name: Print Version
+      run: echo "VERSION is $VERSION"
+    - 
+      uses: actions/checkout@v3
+    - 
+      name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
+    - 
+      name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+    - 
+      name: Build in release mode
+      run: dotnet build --configuration Release /p:Version=${VERSION} --no-restore
+    - 
+      name: Pack
+      run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
+    - 
+      uses: actions/upload-artifact@v3
+      with:
+        name: nupkg
+        path: ./ShlinkDotnet.1.0.1337.nupkg
