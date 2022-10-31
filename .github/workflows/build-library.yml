@@ -35,7 +35,14 @@ jobs:
       name: Pack
       run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output ./out
     - 
+      name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: nupkg
         path: out/
+
+    - # Publish
+      name: publish nuget
+      run: |
+        dotnet nuget push out/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        dotnet nuget push out/*.nupkg -k ${{ secrets.GITHUB_TOKEN }} -s "https://nuget.pkg.github.com/JKamsker/index.json"
