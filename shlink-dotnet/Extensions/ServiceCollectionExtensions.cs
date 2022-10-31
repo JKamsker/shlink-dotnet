@@ -14,11 +14,28 @@ namespace ShlinkDotnet.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddShlink(this IServiceCollection services, string baseUrl, string apiKey)
+        {
+            return services
+                .AddShlinkCore()
+                .Configure<ShlinkConfig>(cnf =>
+                {
+                    cnf.ApiKey = apiKey;
+                    cnf.BaseUrl = baseUrl;
+                });
+        }
+        
         public static IServiceCollection AddShlink(this IServiceCollection services, IConfigurationSection configuration)
         {
             return services
+                .AddShlinkCore()
+                .Configure<ShlinkConfig>(configuration);
+        }
+
+        private static IServiceCollection AddShlinkCore(this IServiceCollection services)
+        {
+            return services
                 .AddHttpClient()
-                .Configure<ShlinkConfig>(configuration)
                 .AddTransient<ShlinkRestClient>(x =>
                 {
                     var config = x.GetRequiredService<IOptions<ShlinkConfig>>().Value;
